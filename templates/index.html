@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Search Engine</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-white min-h-screen">
+    <div class="container mx-auto px-4 py-10">
+        {% if not results %}
+        <!-- Tampilan awal seperti Google -->
+        <div class="flex flex-col items-center justify-center h-[60vh]">
+            <h1 class="text-5xl font-bold text-blue-600 mb-8">BeritaFinder</h1>
+            <form method="post" action="/" class="w-full max-w-xl">
+                <input type="text" name="query" id="query" value="{{ query }}"
+                    placeholder="Cari berita, keputusan, atau entitas..."
+                    class="w-full border border-gray-300 rounded-full py-3 px-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <div class="mt-4 flex justify-center space-x-4">
+                    <select name="top_n"
+                        class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        {% for n in [5, 10, 20, 50] %}
+                        <option value="{{ n }}" {% if top_n==n %}selected{% endif %}>Tampilkan {{ n }} hasil</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow">
+                        Telusuri
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <!-- Hasil pencarian -->
+        <form method="post" action="/" class="mb-6 max-w-4xl mx-auto">
+            <input type="text" name="query" id="query" value="{{ query }}"
+                class="w-full border border-gray-300 rounded-full py-3 px-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <div class="mt-3 flex justify-between items-center">
+                <div>
+                    <label class="text-sm font-medium mr-2">Jumlah hasil:</label>
+                    <select name="top_n"
+                        class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        {% for n in [5, 10, 20, 50] %}
+                        <option value="{{ n }}" {% if top_n==n %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md shadow">
+                    Telusuri Ulang
+                </button>
+            </div>
+        </form>
+
+        <div class="max-w-4xl mx-auto space-y-6">
+            <p class="text-sm text-gray-600">Menampilkan {{ results | length }} hasil untuk: <strong>{{ query
+                    }}</strong></p>
+            {% for result in results %}
+            <div class="border-b pb-4">
+                <a href="/details/{{ result.id }}" class="text-xl text-blue-700 hover:underline font-semibold">{{
+                    result.title }}</a>
+                <p class="text-sm text-green-700">/details/{{ result.id }}</p>
+                <p class="text-gray-800 leading-relaxed">{{ result.highlighted_text | safe }}...</p>
+                <p class="text-xs text-gray-500 mt-1">BM25 Score: {{ '%.4f' | format(result.bm25_score) }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <footer class="mt-16 border-t pt-6 pb-10 text-center text-sm text-gray-500">
+        <p>&copy; {{ year }} BeritaFinder • Dibuat untuk keperluan pembelajaran dan riset NLP</p>
+        <p class="mt-1">
+            Dataset oleh <a href="https://www.kaggle.com/datasets/ibamibrahim/indonesian-news-title?resource=download"
+                class="text-blue-600 hover:underline" target="_blank">Kaggle</a> • UI terinspirasi
+            Google
+        </p>
+    </footer>
+</body>
+
+</html>
