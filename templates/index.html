@@ -14,7 +14,7 @@
         <div class="flex flex-col items-center justify-center h-[60vh]">
             <h1 class="text-5xl font-bold text-blue-600 mb-8">Sistem Penemu Berita</h1>
             <form method="post" action="/" class="w-full max-w-xl">
-                <div class="relative">
+                <div class="relative mb-4">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,6 +25,33 @@
                         placeholder="Cari berita, keputusan, atau entitas..."
                         class="w-full border border-gray-300 rounded-full py-3 pl-12 pr-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </div>
+
+                <!-- Filter Tanggal -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Filter Tanggal (Opsional)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label for="start_date" class="block text-xs font-medium text-gray-600 mb-1">Dari
+                                Tanggal:</label>
+                            <input type="date" name="start_date" id="start_date" value="{{ start_date }}"
+                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                        <div>
+                            <label for="end_date" class="block text-xs font-medium text-gray-600 mb-1">Sampai
+                                Tanggal:</label>
+                            <input type="date" name="end_date" id="end_date" value="{{ end_date }}"
+                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-4 flex justify-center space-x-4">
                     <select name="top_n"
                         class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -36,13 +63,17 @@
                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow">
                         Telusuri
                     </button>
+                    <button type="button" onclick="clearFilters()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md shadow">
+                        Reset
+                    </button>
                 </div>
             </form>
         </div>
         {% else %}
         <!-- Hasil pencarian -->
         <form method="post" action="/" class="mb-6 max-w-4xl mx-auto">
-            <div class="relative">
+            <div class="relative mb-4">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,33 +83,99 @@
                 <input type="text" name="query" id="query" value="{{ query }}"
                     class="w-full border border-gray-300 rounded-full py-3 pl-12 pr-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
             </div>
-            <div class="mt-3 flex justify-between items-center">
-                <div>
-                    <label class="text-sm font-medium mr-2">Jumlah hasil:</label>
-                    <select name="top_n"
-                        class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                        {% for n in [5, 10, 20, 50] %}
-                        <option value="{{ n }}" {% if top_n==n %}selected{% endif %}>{{ n }}</option>
-                        {% endfor %}
-                    </select>
+
+            <!-- Filter Tanggal dalam hasil pencarian -->
+            <div class="bg-gray-50 rounded-lg p-3 mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+                    <div>
+                        <label for="start_date_results" class="block text-xs font-medium text-gray-600 mb-1">Dari
+                            Tanggal:</label>
+                        <input type="date" name="start_date" id="start_date_results" value="{{ start_date }}"
+                            class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+                    <div>
+                        <label for="end_date_results" class="block text-xs font-medium text-gray-600 mb-1">Sampai
+                            Tanggal:</label>
+                        <input type="date" name="end_date" id="end_date_results" value="{{ end_date }}"
+                            class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    </div>
+                    <div>
+                        <select name="top_n"
+                            class="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            {% for n in [5, 10, 20, 50] %}
+                            <option value="{{ n }}" {% if top_n==n %}selected{% endif %}>{{ n }} hasil</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
+            </div>
+
+            <div class="flex justify-center">
                 <button type="submit"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md shadow">
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-2 rounded-md shadow">
                     Telusuri Ulang
                 </button>
             </div>
         </form>
-
+        <!-- Penanganan jika terjadi error -->
         <div class="max-w-4xl mx-auto space-y-6">
-            <p class="text-sm text-gray-600">Menampilkan {{ results | length }} hasil untuk: <strong>{{ query
-                    }}</strong></p>
+            {% if error_message %}
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-red-800">{{ error_message }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if results %}
+            <div class="flex flex-wrap items-center justify-between mb-4">
+                <p class="text-sm text-gray-600">
+                    Menampilkan {{ results | length }} hasil
+                    {% if query %}untuk: <strong>{{ query }}</strong>{% endif %}
+                </p>
+                {% if start_date or end_date %}
+                <div class="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                    {% if start_date and end_date %}
+                    Filter: {{ start_date }} sampai {{ end_date }}
+                    {% elif start_date %}
+                    Filter: Dari {{ start_date }}
+                    {% elif end_date %}
+                    Filter: Sampai {{ end_date }}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
             {% for result in results %}
             <div class="border-b pb-4">
                 <a href="/details/{{ result.id }}" class="text-xl text-blue-700 hover:underline font-semibold">{{
                     result.title }}</a>
                 <p class="text-sm text-green-700">/details/{{ result.id }}</p>
                 <p class="text-gray-800 leading-relaxed">{{ result.highlighted_text | safe }}...</p>
-                <p class="text-xs text-gray-500 mt-1">BM25 Score: {{ '%.4f' | format(result.bm25_score) }}</p>
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center space-x-4 text-xs text-gray-500">
+                        {% if result.date %}
+                        <span class="flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            {% if result.date is string %}
+                            {{ result.date }}
+                            {% else %}
+                            {{ result.date.strftime('%d %b %Y') if result.date else 'Tanggal tidak tersedia' }}
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                        <span>BM25 Score: {{ '%.4f' | format(result.bm25_score) }}</span>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -92,9 +189,19 @@
             Google
         </p>
         <p class="mt-1">
-            Pembuat <a href="" class="text-blue-600 hover:underline" target="_blank">Muhammad Haikal Firmansyah</a> • 230411100095
+            Pembuat <a href="" class="text-blue-600 hover:underline" target="_blank">Muhammad Haikal Firmansyah</a> •
+            230411100095
         </p>
     </footer>
+
+    <script>
+        function clearFilters() {
+            document.getElementById('query').value = '';
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+            document.querySelector('select[name="top_n"]').value = '10';
+        }
+    </script>
 </body>
 
 </html>
