@@ -1,15 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Detail Dokumen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ document.title }} - Detail Berita</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 p-10">
-    <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-        <h1 class="text-3xl font-bold mb-4">{{ document.title }}</h1>
-        <p class="text-gray-800 whitespace-pre-line">{{ document.text }}</p>
-        <a href="/" class="text-blue-600 hover:underline mt-4 inline-block">← Kembali</a>
-    </div>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-4xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="font-medium">Kembali ke Pencarian</span>
+                </a>
+                <div class="text-sm text-gray-500">
+                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Detail Berita</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-8 px-6">
+        <article class="max-w-4xl mx-auto">
+            <!-- Article Header -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
+                    <h1 class="text-3xl md:text-4xl font-bold text-white leading-tight">{{ document.title }}</h1>
+                </div>
+                
+                <!-- Article Meta -->
+                <div class="px-8 py-4 border-b bg-gray-50">
+                    <div class="flex flex-wrap items-center space-x-6 text-sm text-gray-600">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>{{ "Hari ini" if not document.date else document.date }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                            <span>ID: {{ document.id if document.id else "N/A" }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>{{ (document.text | length) if document.text else 0 }} karakter</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article Content -->
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="prose prose-lg max-w-none">
+                    {% if document.text %}
+                        <div class="text-gray-800 leading-relaxed text-lg">
+                            {{ document.text | replace('\n', '</p><p class="mb-4">') | safe }}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-12">
+                            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <p class="text-gray-500 text-lg">Konten artikel tidak tersedia</p>
+                            <p class="text-gray-400 text-sm mt-2">Hanya judul yang tersedia untuk artikel ini</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-wrap gap-4 justify-center">
+                <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-md transition-colors duration-200 flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <span>Cari Berita Lain</span>
+                </a>
+                <button onclick="window.history.back()" class="bg-gray-600 hover:bg-gray-700 text-white font-medium px-6 py-3 rounded-lg shadow-md transition-colors duration-200 flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span>Kembali</span>
+                </button>
+                <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg shadow-md transition-colors duration-200 flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    <span>Cetak</span>
+                </button>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t bg-white py-8">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <div class="text-sm text-gray-500">
+                <p>&copy; {{ "2025" }} Sistem Penemu Berita • Dibuat untuk keperluan pembelajaran dan riset NLP</p>
+                <p class="mt-1">
+                    Dataset oleh <a href="https://www.kaggle.com/datasets/ibamibrahim/indonesian-news-title?resource=download" 
+                        class="text-blue-600 hover:underline" target="_blank">Kaggle</a> • UI terinspirasi Google
+                </p>
+                <p class="mt-1">
+                    Pembuat <a href="#" class="text-blue-600 hover:underline">Muhammad Haikal Firmansyah</a> • 230411100095
+                </p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

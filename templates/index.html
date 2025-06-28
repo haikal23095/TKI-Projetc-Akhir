@@ -12,11 +12,19 @@
         {% if not results %}
         <!-- Tampilan awal seperti Google -->
         <div class="flex flex-col items-center justify-center h-[60vh]">
-            <h1 class="text-5xl font-bold text-blue-600 mb-8">BeritaFinder</h1>
+            <h1 class="text-5xl font-bold text-blue-600 mb-8">Sistem Penemu Berita</h1>
             <form method="post" action="/" class="w-full max-w-xl">
-                <input type="text" name="query" id="query" value="{{ query }}"
-                    placeholder="Cari berita, keputusan, atau entitas..."
-                    class="w-full border border-gray-300 rounded-full py-3 px-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" name="query" id="query" value="{{ query }}"
+                        placeholder="Cari berita, keputusan, atau entitas..."
+                        class="w-full border border-gray-300 rounded-full py-3 pl-12 pr-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
                 <div class="mt-4 flex justify-center space-x-4">
                     <select name="top_n"
                         class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -34,8 +42,16 @@
         {% else %}
         <!-- Hasil pencarian -->
         <form method="post" action="/" class="mb-6 max-w-4xl mx-auto">
-            <input type="text" name="query" id="query" value="{{ query }}"
-                class="w-full border border-gray-300 rounded-full py-3 px-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="text" name="query" id="query" value="{{ query }}"
+                    class="w-full border border-gray-300 rounded-full py-3 pl-12 pr-5 text-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
             <div class="mt-3 flex justify-between items-center">
                 <div>
                     <label class="text-sm font-medium mr-2">Jumlah hasil:</label>
@@ -69,11 +85,14 @@
         {% endif %}
     </div>
     <footer class="mt-16 border-t pt-6 pb-10 text-center text-sm text-gray-500">
-        <p>&copy; {{ year }} BeritaFinder • Dibuat untuk keperluan pembelajaran dan riset NLP</p>
+        <p>&copy; {{ year }} Sistem Penemu Berita • Dibuat untuk keperluan pembelajaran dan riset NLP</p>
         <p class="mt-1">
             Dataset oleh <a href="https://www.kaggle.com/datasets/ibamibrahim/indonesian-news-title?resource=download"
                 class="text-blue-600 hover:underline" target="_blank">Kaggle</a> • UI terinspirasi
             Google
+        </p>
+        <p class="mt-1">
+            Pembuat <a href="" class="text-blue-600 hover:underline" target="_blank">Muhammad Haikal Firmansyah</a> • 230411100095
         </p>
     </footer>
 </body>
