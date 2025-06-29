@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request
 from datetime import datetime
+from markupsafe import Markup
 
 year = datetime.now().year
 
@@ -91,8 +92,8 @@ def search():
     return render_template('index.html', query=query, results=results_dict, top_n=top_n, 
                          start_date=start_date, end_date=end_date, year=year)
 
-from markupsafe import Markup
 
+# fungsi untuk menghighleight text
 def highlight_text(text, query):
     terms = query.lower().split()
     for term in terms:
